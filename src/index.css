@@ -13,21 +13,26 @@
     --accent-gold: #D97706;
   }
 
+  html,
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: #FAF6F1;
     color: #2D3819;
     overflow-x: hidden;
+    max-width: 100%;
   }
 
-  h1, h2, .font-display {
+  h1,
+  h2,
+  .font-display,
+  .font-serif {
     font-family: 'Fraunces', Georgia, serif;
     text-wrap: balance;
   }
 
-  .font-mono-tabular {
+  .font-mono-tabular,
+  .font-mono {
     font-family: 'JetBrains Mono', monospace;
     font-variant-numeric: tabular-nums;
   }
 }
-

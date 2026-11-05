@@ -10,7 +10,7 @@ import {
   InquiryFormInput,
   formatRupiah,
 } from '../utils/catalogLogic';
-import { CheckCircle2, Send, Plus, Minus, Trash2 } from 'lucide-react';
+import { CheckCircle2, Send, Plus, Minus, Trash2, ChevronDown } from 'lucide-react';
 
 interface InquiryAndOrderSectionProps {
   cart: CartItem[];
@@ -44,6 +44,7 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
     Partial<Record<keyof InquiryFormInput, string>>
   >({});
   const [receipt, setReceipt] = useState<SubmittedReceipt | null>(null);
+  const [showCartItems, setShowCartItems] = useState<boolean>(false);
 
   const summary = calculateCartSummary(cart, PRODUCT_CATALOG_7_SKU);
 
@@ -91,78 +92,71 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
   return (
     <section
       id="kontak"
-      className="bg-[#1E3A2B] text-[#FAF6F1] py-16 lg:py-24 border-b border-white/15"
+      className="bg-[#14281D] text-[#FAF6F1] py-10 sm:py-14 border-b border-white/15"
     >
-      <div className="max-w-[1360px] mx-auto px-6">
-        {/* Northeast Tomato "Let's talk production" Conversion Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Direct Contact & Live Order Cart Summary */}
-          <div className="lg:col-span-5 space-y-6">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+          {/* Left Column: Compact Header & Collapsible Cart Summary */}
+          <div className="lg:col-span-5 space-y-4">
             <div>
-              <p className="text-xs font-semibold text-[#EADDCC] mb-2">
-                13. Mari Diskusikan Pengadaan &amp; Kemitraan
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-[#E07A5F] mb-1">
+                Pengadaan &amp; Konsultasi B2B
               </p>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#FAF6F1] leading-tight mb-4">
-                Siap Mengoptimalkan Produktivitas Lahan &amp; Rantai Pasok Anda?
+              <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#FAF6F1] leading-snug mb-2">
+                Diskusikan Pengadaan SKU &amp; Proyek Lahan Anda
               </h2>
-              <p className="text-sm text-[#EADDCC] leading-relaxed">
-                Tim komersial dan agronomi AgriXentris Nusantara di Dramaga, Bogor siap menyusun penawaran pengadaan 7 SKU sarana produksi, jadwal pelatihan SDM, maupun proposal supervisi proyek.
+              <p className="text-xs text-[#D8D2C5] leading-relaxed">
+                Tim komersial dan agronomi AgriXentris Nusantara di Dramaga, Bogor siap menyusun penawaran resmi.
               </p>
             </div>
 
-            {/* Live Order Summary Widget */}
-            <div className="bg-[#FAF6F1] text-[#2D3819] rounded-xl p-6 border border-[#E5D5C0]">
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E5D5C0]">
+            {/* Compact Collapsible Order Summary Widget */}
+            <div className="bg-[#FAF6F1] text-[#2D3819] rounded-xl p-4 border border-[#E5D5C0]">
+              <div className="flex items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-display text-lg font-bold text-[#1E3A2B]">
-                    Ringkasan Daftar Pesanan SKU
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#1E3A2B]">
+                    Ringkasan Daftar Pesanan ({summary.totalItemsCount} unit)
                   </h3>
-                  <p className="text-xs text-[#4C5520]">
-                    Otomatis menerapkan harga grosir B2B sesuai MOQ
+                  <p className="font-mono text-xs font-bold text-[#B84A27]">
+                    Total Estimasi: {formatRupiah(summary.grandTotal)}
                   </p>
                 </div>
-                {summary.lines.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={onClearCart}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#D95338] hover:underline cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>Kosongkan</span>
-                  </button>
-                )}
+                <div className="flex items-center gap-2">
+                  {summary.lines.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowCartItems((prev) => !prev)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#F0E5D7] text-xs font-semibold text-[#1E3A2B] cursor-pointer"
+                    >
+                      <span>{showCartItems ? 'Tutup' : 'Rincian'}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          showCartItems ? 'rotate-180 text-[#B84A27]' : ''
+                        }`}
+                      />
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {summary.lines.length === 0 ? (
-                <div className="py-6 text-center">
-                  <p className="text-xs text-[#4C5520] mb-3">
-                    Belum ada SKU yang dipilih di daftar pesanan. Anda tetap dapat mengirim permohonan konsultasi atau memilih produk dari katalog di atas.
-                  </p>
-                  <a
-                    href="#katalog"
-                    className="inline-block px-4 py-2 text-xs font-semibold text-[#FAF6F1] bg-[#1E3A2B] rounded-lg hover:bg-[#4C5520] transition-colors"
-                  >
-                    Pilih Produk dari Katalog 7 SKU
-                  </a>
-                </div>
-              ) : (
-                <div className="space-y-3">
+              {showCartItems && summary.lines.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-[#E5D5C0] space-y-2">
                   {summary.lines.map((line) => (
                     <div
                       key={line.product.id}
-                      className="p-3 rounded-lg bg-[#F0E5D7]/70 border border-[#E5D5C0] flex items-center justify-between gap-3"
+                      className="p-2.5 rounded-lg bg-[#F0E5D7]/70 border border-[#E5D5C0] flex items-center justify-between gap-2"
                     >
                       <div className="min-w-0">
                         <p className="text-xs font-bold text-[#1E3A2B] truncate">
                           {line.product.shortTitle}
                         </p>
-                        <p className="text-[11px] font-mono-tabular text-[#4C5520]">
-                          {formatRupiah(line.unitPriceApplied)} / unit{' '}
-                          {line.isWholesaleApplied ? '(Grosir B2B)' : '(Ritel)'}
+                        <p className="text-[10px] font-mono text-[#4C5520]">
+                          {formatRupiah(line.unitPriceApplied)}/unit{' '}
+                          {line.isWholesaleApplied ? '(Grosir)' : '(Ritel)'}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-1.5 shrink-0">
                         <button
                           type="button"
                           onClick={() =>
@@ -171,9 +165,9 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                           aria-label={`Kurangi ${line.product.shortTitle}`}
                           className="p-1 rounded bg-[#FAF6F1] border border-[#E5D5C0] text-[#1E3A2B] hover:bg-[#EADDCC] cursor-pointer"
                         >
-                          <Minus className="w-3 h-3" aria-hidden="true" />
+                          <Minus className="w-3 h-3" />
                         </button>
-                        <span className="font-mono-tabular text-xs font-bold w-6 text-center">
+                        <span className="font-mono text-xs font-bold w-6 text-center">
                           {line.quantity}
                         </span>
                         <button
@@ -184,145 +178,105 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                           aria-label={`Tambah ${line.product.shortTitle}`}
                           className="p-1 rounded bg-[#FAF6F1] border border-[#E5D5C0] text-[#1E3A2B] hover:bg-[#EADDCC] cursor-pointer"
                         >
-                          <Plus className="w-3 h-3" aria-hidden="true" />
+                          <Plus className="w-3 h-3" />
                         </button>
                       </div>
                     </div>
                   ))}
-
-                  <div className="pt-3 border-t border-[#E5D5C0] space-y-1 text-xs">
-                    {summary.totalSavingsWholesale > 0 && (
-                      <div className="flex justify-between text-[#2E6F40] font-semibold">
-                        <span>Penghematan Harga Grosir B2B:</span>
-                        <span className="font-mono-tabular">
-                          -{formatRupiah(summary.totalSavingsWholesale)}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex justify-between items-baseline pt-1">
-                      <span className="font-semibold text-[#1E3A2B]">
-                        Total Estimasi Pengadaan ({summary.totalItemsCount} unit):
-                      </span>
-                      <span className="font-mono-tabular text-lg font-bold text-[#1E3A2B]">
-                        {formatRupiah(summary.grandTotal)}
-                      </span>
-                    </div>
+                  <div className="flex justify-end pt-1">
+                    <button
+                      type="button"
+                      onClick={onClearCart}
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D95338] hover:underline cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span>Kosongkan daftar</span>
+                    </button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Direct HQ Contact Details */}
-            <div className="bg-white/10 border border-white/15 rounded-xl p-5 text-xs space-y-2 text-[#EADDCC]">
+            {/* Compact Contact Info */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 text-xs space-y-1 text-[#D8D2C5]">
               <p>
-                <strong className="text-white">Kantor Pusat:</strong>{' '}
-                {COMPANY_PROFILE.headquarters}
+                <strong className="text-white">Kantor Pusat:</strong> {COMPANY_PROFILE.headquarters}
               </p>
-              <p className="font-mono-tabular">
-                <strong className="text-white">Telepon / WhatsApp:</strong>{' '}
-                {COMPANY_PROFILE.phone}
-              </p>
-              <p className="font-mono-tabular">
-                <strong className="text-white">Email Resmi:</strong>{' '}
+              <p className="font-mono">
+                <strong className="text-white">WA / Telp:</strong> {COMPANY_PROFILE.phone} ·{' '}
                 {COMPANY_PROFILE.email}
               </p>
             </div>
           </div>
 
-          {/* Right Column: Validated B2B Inquiry & Order Form */}
-          <div className="lg:col-span-7 bg-[#FAF6F1] text-[#2D3819] rounded-2xl p-7 sm:p-9 border border-[#E5D5C0]">
+          {/* Right Column: Compact Validated B2B Inquiry & Order Form */}
+          <div className="lg:col-span-7 bg-[#FAF6F1] text-[#2D3819] rounded-2xl p-4 sm:p-6 border border-[#E5D5C0]">
             {receipt ? (
-              <div className="py-6 space-y-6">
+              <div className="py-4 space-y-4">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2
-                    className="w-7 h-7 text-[#2E6F40] shrink-0 mt-0.5"
-                    aria-hidden="true"
-                  />
+                  <CheckCircle2 className="w-6 h-6 text-[#2E6F40] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-mono-tabular text-xs font-bold text-[#D95338]">
-                      REFERENSI PERMOHONAN: {receipt.referenceCode}
+                    <span className="font-mono text-xs font-bold text-[#D95338]">
+                      REFERENSI: {receipt.referenceCode}
                     </span>
-                    <h3 className="font-display text-2xl font-bold text-[#1E3A2B] mt-1">
-                      Permohonan Pengadaan &amp; Konsultasi Berhasil Tercatat
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1E3A2B] mt-0.5">
+                      Permohonan Pengadaan Berhasil Tercatat
                     </h3>
-                    <p className="text-xs text-[#4C5520] mt-1">
-                      Diterima pada {receipt.submittedAt} oleh Direktorat Komersial (CCO) AgriXentris Nusantara.
+                    <p className="text-xs text-[#4C5520]">
+                      Diterima pada {receipt.submittedAt} oleh Direktorat Komersial (CCO).
                     </p>
                   </div>
                 </div>
 
-                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#F0E5D7]/70 border border-[#E5D5C0] rounded-xl p-5 text-xs">
+                <dl className="grid grid-cols-2 gap-3 bg-[#F0E5D7]/70 border border-[#E5D5C0] rounded-xl p-3.5 text-xs">
                   <div>
-                    <dt className="text-[#4C5520]">Pemohon &amp; Instansi</dt>
-                    <dd className="font-bold text-[#1E3A2B] mt-0.5">
-                      {receipt.form.fullName} — {receipt.form.organization}
+                    <dt className="text-[#4C5520]">Pemohon</dt>
+                    <dd className="font-bold text-[#1E3A2B]">
+                      {receipt.form.fullName} ({receipt.form.organization})
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-[#4C5520]">Kategori Kebutuhan</dt>
-                    <dd className="font-bold text-[#1E3A2B] mt-0.5">
-                      {receipt.form.inquiryType}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-[#4C5520]">Kontak Konfirmasi</dt>
-                    <dd className="font-mono-tabular font-medium text-[#2D3819] mt-0.5">
-                      {receipt.form.email} · {receipt.form.phone}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-[#4C5520]">Nilai SKU Terlampir</dt>
-                    <dd className="font-mono-tabular font-bold text-[#1E3A2B] mt-0.5">
-                      {receipt.itemCount > 0
-                        ? `${receipt.itemCount} Unit (${formatRupiah(
-                            receipt.totalEstimatedRp
-                          )})`
-                        : 'Konsultasi Tanpa Lampiran SKU'}
+                    <dt className="text-[#4C5520]">Nilai SKU</dt>
+                    <dd className="font-mono font-bold text-[#1E3A2B]">
+                      {receipt.itemCount} Unit ({formatRupiah(receipt.totalEstimatedRp)})
                     </dd>
                   </div>
                 </dl>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setReceipt(null)}
-                    className="px-5 py-2.5 text-xs font-semibold text-[#FAF6F1] bg-[#1E3A2B] hover:bg-[#4C5520] rounded-lg transition-colors cursor-pointer"
-                  >
-                    Buat Permohonan Baru
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setReceipt(null)}
+                  className="px-4 py-2 text-xs font-semibold text-[#FAF6F1] bg-[#1E3A2B] rounded-lg cursor-pointer"
+                >
+                  Buat Permohonan Baru
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                <div className="pb-4 border-b border-[#E5D5C0]">
-                  <h3 className="font-display text-2xl font-bold text-[#1E3A2B]">
+              <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
+                <div className="pb-2.5 border-b border-[#E5D5C0]">
+                  <h3 className="font-serif text-base sm:text-xl font-bold text-[#1E3A2B]">
                     Formulir Pemesanan Katalog &amp; Kemitraan B2B
                   </h3>
-                  <p className="text-xs text-[#4C5520] mt-1">
-                    Lengkapi data di bawah ini untuk mendapatkan faktur proforma (PO), jadwal kunjungan lahan, atau prospektus investasi.
-                  </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label
                       htmlFor="inquiry-fullname"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
-                      Nama Lengkap Penanggung Jawab *
+                      Nama Lengkap *
                     </label>
                     <input
                       id="inquiry-fullname"
                       type="text"
                       value={form.fullName}
-                      onChange={(e) =>
-                        handleFieldChange('fullName', e.target.value)
-                      }
-                      placeholder="Contoh: Ir. Hendra Wijaya"
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      onChange={(e) => handleFieldChange('fullName', e.target.value)}
+                      placeholder="Ir. Hendra Wijaya"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     />
                     {errors.fullName && (
-                      <p className="text-xs font-medium text-[#D95338] mt-1">
+                      <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                         {errors.fullName}
                       </p>
                     )}
@@ -331,7 +285,7 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                   <div>
                     <label
                       htmlFor="inquiry-organization"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
                       Instansi / Koperasi / Perusahaan *
                     </label>
@@ -339,40 +293,36 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                       id="inquiry-organization"
                       type="text"
                       value={form.organization}
-                      onChange={(e) =>
-                        handleFieldChange('organization', e.target.value)
-                      }
-                      placeholder="Contoh: Kelompok Tani Karya Mandiri"
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      onChange={(e) => handleFieldChange('organization', e.target.value)}
+                      placeholder="Kelompok Tani Karya Mandiri"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     />
                     {errors.organization && (
-                      <p className="text-xs font-medium text-[#D95338] mt-1">
+                      <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                         {errors.organization}
                       </p>
                     )}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label
                       htmlFor="inquiry-email"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
-                      Alamat Email Resmi *
+                      Email Resmi *
                     </label>
                     <input
                       id="inquiry-email"
                       type="email"
                       value={form.email}
-                      onChange={(e) =>
-                        handleFieldChange('email', e.target.value)
-                      }
+                      onChange={(e) => handleFieldChange('email', e.target.value)}
                       placeholder="nama@instansi.co.id"
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     />
                     {errors.email && (
-                      <p className="text-xs font-medium text-[#D95338] mt-1">
+                      <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                         {errors.email}
                       </p>
                     )}
@@ -381,35 +331,33 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                   <div>
                     <label
                       htmlFor="inquiry-phone"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
-                      Nomor WhatsApp / Telepon Aktif *
+                      Nomor WhatsApp *
                     </label>
                     <input
                       id="inquiry-phone"
                       type="tel"
                       value={form.phone}
-                      onChange={(e) =>
-                        handleFieldChange('phone', e.target.value)
-                      }
+                      onChange={(e) => handleFieldChange('phone', e.target.value)}
                       placeholder="081234567890"
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     />
                     {errors.phone && (
-                      <p className="text-xs font-medium text-[#D95338] mt-1">
+                      <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                         {errors.phone}
                       </p>
                     )}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label
                       htmlFor="inquiry-type"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
-                      Kategori Layanan / Pengadaan
+                      Kategori Layanan
                     </label>
                     <select
                       id="inquiry-type"
@@ -420,7 +368,7 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                           e.target.value as InquiryFormInput['inquiryType']
                         )
                       }
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     >
                       <option value="Pengadaan Produk (Katalog SKU)">
                         Pengadaan Produk (Katalog SKU)
@@ -440,22 +388,20 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                   <div>
                     <label
                       htmlFor="inquiry-location"
-                      className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                      className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                     >
-                      Kota / Provinsi Lokasi Lahan *
+                      Kota / Lokasi Lahan *
                     </label>
                     <input
                       id="inquiry-location"
                       type="text"
                       value={form.locationCity}
-                      onChange={(e) =>
-                        handleFieldChange('locationCity', e.target.value)
-                      }
-                      placeholder="Contoh: Dramaga, Bogor / Jawa Barat"
-                      className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                      onChange={(e) => handleFieldChange('locationCity', e.target.value)}
+                      placeholder="Dramaga, Bogor"
+                      className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                     />
                     {errors.locationCity && (
-                      <p className="text-xs font-medium text-[#D95338] mt-1">
+                      <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                         {errors.locationCity}
                       </p>
                     )}
@@ -465,36 +411,31 @@ export const InquiryAndOrderSection: React.FC<InquiryAndOrderSectionProps> = ({
                 <div>
                   <label
                     htmlFor="inquiry-notes"
-                    className="block text-xs font-semibold text-[#1E3A2B] mb-1.5"
+                    className="block text-[11px] font-semibold text-[#1E3A2B] mb-1"
                   >
-                    Rincian Kebutuhan, Luas Lahan, atau Pertanyaan Teknis *
+                    Rincian Kebutuhan / Luas Lahan *
                   </label>
                   <textarea
                     id="inquiry-notes"
-                    rows={3}
+                    rows={2}
                     value={form.notes}
-                    onChange={(e) =>
-                      handleFieldChange('notes', e.target.value)
-                    }
-                    placeholder="Tuliskan luas lahan, jadwal tanam, atau spesifikasi pengadaan yang dibutuhkan..."
-                    className="w-full px-3.5 py-2.5 text-sm bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819] focus:outline-2 focus:outline-[#4C5520]"
+                    onChange={(e) => handleFieldChange('notes', e.target.value)}
+                    placeholder="Tuliskan luas lahan atau spesifikasi pengadaan..."
+                    className="w-full px-3 py-2 text-xs bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-lg text-[#2D3819]"
                   />
                   {errors.notes && (
-                    <p className="text-xs font-medium text-[#D95338] mt-1">
+                    <p className="text-[11px] font-medium text-[#D95338] mt-0.5">
                       {errors.notes}
                     </p>
                   )}
                 </div>
 
-                <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
-                  <p className="text-xs text-[#4C5520]">
-                    *Seluruh permohonan ditangani langsung oleh tim C-Level &amp; Technical Support AgriXentris Nusantara.
-                  </p>
+                <div className="pt-1 flex items-center justify-end">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 text-xs font-semibold text-[#FAF6F1] bg-[#D95338] hover:bg-[#B84028] rounded-lg transition-colors cursor-pointer whitespace-nowrap shadow-xs"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-semibold text-[#FAF6F1] bg-[#B84A27] hover:bg-[#9E3C1E] rounded-lg transition-colors cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5" aria-hidden="true" />
+                    <Send className="w-3.5 h-3.5" />
                     <span>Kirim Permohonan &amp; Pesanan</span>
                   </button>
                 </div>

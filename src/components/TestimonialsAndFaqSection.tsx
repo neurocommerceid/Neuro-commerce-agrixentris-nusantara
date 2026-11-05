@@ -1,102 +1,131 @@
 import React, { useState } from 'react';
-import {
-  CUSTOMER_TESTIMONIALS,
-  FAQ_ITEMS,
-} from '../data/agrixentrisData';
-import { ChevronDown } from 'lucide-react';
+import { Quote, ChevronDown, HelpCircle } from 'lucide-react';
+import { CUSTOMER_TESTIMONIALS, FAQ_ITEMS } from '../data/agrixentrisData';
 
 export const TestimonialsAndFaqSection: React.FC = () => {
-  const [openFaqId, setOpenFaqId] = useState<string>(FAQ_ITEMS[0].id);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [expandedQuoteIdx, setExpandedQuoteIdx] = useState<number | null>(null);
+  const [showAllTestimonials, setShowAllTestimonials] = useState(false);
 
-  const toggleFaq = (id: string) => {
-    setOpenFaqId((prev) => (prev === id ? '' : id));
-  };
+  const visibleTestimonials = showAllTestimonials
+    ? CUSTOMER_TESTIMONIALS
+    : CUSTOMER_TESTIMONIALS.slice(0, 4);
 
   return (
-    <section className="bg-[#F0E5D7] border-b border-[#E5D5C0] py-16 lg:py-24">
-      <div className="max-w-[1360px] mx-auto px-6">
-        {/* 11. Testimoni Pelanggan (All 8 Real Testimonials from PDF) */}
-        <div className="pb-16 border-b border-[#E5D5C0]">
-          <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold text-[#D95338] mb-2">
-                11. Testimoni Pelanggan &amp; Mitra Strategis
+    <section className="py-10 sm:py-14 bg-[#FDFBF7] border-b border-[#E2DDD2]">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 space-y-10">
+        {/* Compact Testimonials Grid */}
+        <div>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-[#B84A27] mb-1">
+                Suara Mitra &amp; Klien
               </p>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3A2B] leading-tight">
-                Dipercaya oleh Dinas Pemerintah Daerah, BUMD, Kampus Vokasi, Korporasi &amp; Kelompok Tani.
+              <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#14281D]">
+                Testimoni Mitra Lapangan
               </h2>
             </div>
-            <p className="text-xs text-[#4C5520] max-w-sm">
-              Dokumentasi testimoni nyata dari mitra pelaksanaan proyek greenhouse, pelatihan SDM, dan pengguna benih unggul AgriXentris Nusantara.
-            </p>
+            <button
+              type="button"
+              onClick={() => setShowAllTestimonials((prev) => !prev)}
+              className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#D8D2C5] bg-[#F6F4EE] text-xs font-semibold text-[#14281D] hover:border-[#14281D] cursor-pointer"
+            >
+              <span>
+                {showAllTestimonials
+                  ? 'Tampilkan 4 Testimoni Utama'
+                  : `Lihat Semua (${CUSTOMER_TESTIMONIALS.length} Testimoni)`}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  showAllTestimonials ? 'rotate-180 text-[#B84A27]' : ''
+                }`}
+              />
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {CUSTOMER_TESTIMONIALS.map((item) => (
-              <blockquote
-                key={item.id}
-                className="bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-6 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="text-xs text-[#4C5520] mb-3 pb-3 border-b border-[#E5D5C0]">
-                    <cite className="not-italic font-display text-base font-bold text-[#1E3A2B] block">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            {visibleTestimonials.map((item, idx) => {
+              const isExpanded = expandedQuoteIdx === idx;
+              return (
+                <div
+                  key={item.id}
+                  className="p-3 sm:p-4 rounded-xl bg-[#F6F4EE] border border-[#E2DDD2] flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <Quote className="w-3.5 h-3.5 text-[#B84A27]/60 shrink-0" />
+                      <span className="text-[10px] font-mono text-[#68736B] truncate max-w-[110px]">
+                        {item.sector}
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] leading-snug line-clamp-1">
                       {item.client}
-                    </cite>
-                    <span className="block mt-0.5 text-[11px]">
-                      {item.sector} · {item.program}
-                    </span>
+                    </h3>
+                    <p className="text-[10px] text-[#B84A27] mb-1.5 line-clamp-1">
+                      {item.program}
+                    </p>
+
+                    <p
+                      className={`text-[11px] text-[#4A554E] leading-relaxed ${
+                        isExpanded ? '' : 'line-clamp-2'
+                      }`}
+                    >
+                      “{item.quote}”
+                    </p>
                   </div>
-                  <p className="text-xs text-[#2D3819] leading-relaxed">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setExpandedQuoteIdx(isExpanded ? null : idx)}
+                    className="mt-2 pt-2 border-t border-[#E2DDD2] flex items-center justify-between text-[10px] font-semibold text-[#14281D] hover:text-[#B84A27] cursor-pointer"
+                  >
+                    <span>{isExpanded ? 'Ringkas' : 'Baca kutipan'}</span>
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-200 ${
+                        isExpanded ? 'rotate-180 text-[#B84A27]' : ''
+                      }`}
+                    />
+                  </button>
                 </div>
-              </blockquote>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Northeast Tomato "Questions, answered" Style Editorial FAQ */}
-        <div className="pt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-5">
-            <p className="text-xs font-semibold text-[#4C5520] mb-2">
-              12. Pertanyaan Umum (FAQ)
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3A2B] leading-tight mb-4">
-              Pertanyaan Seputar Pengadaan, Pendampingan &amp; Investasi.
-            </h2>
-            <p className="text-sm text-[#3A3C31] leading-relaxed">
-              Jawaban langsung atas pertanyaan yang paling sering diajukan oleh calon mitra kelompok tani, instansi pemerintah, pembeli grosir sarana produksi, dan investor.
-            </p>
+        {/* Compact FAQ Accordion */}
+        <div className="pt-4 border-t border-[#E2DDD2]">
+          <div className="flex items-center gap-2 mb-4">
+            <HelpCircle className="w-4 h-4 text-[#B84A27]" />
+            <h3 className="font-serif text-lg sm:text-2xl font-bold text-[#14281D]">
+              Pertanyaan Umum (FAQ)
+            </h3>
           </div>
 
-          <div className="lg:col-span-7 divide-y divide-[#E5D5C0] border-t border-b border-[#E5D5C0]">
-            {FAQ_ITEMS.map((faq) => {
-              const isOpen = openFaqId === faq.id;
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            {FAQ_ITEMS.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
               return (
-                <div key={faq.id} className="py-4">
+                <div
+                  key={faq.id}
+                  className="rounded-xl border border-[#D8D2C5] bg-[#F6F4EE] overflow-hidden self-start"
+                >
                   <button
                     type="button"
-                    onClick={() => toggleFaq(faq.id)}
-                    aria-expanded={isOpen}
-                    className="w-full flex items-center justify-between gap-4 text-left py-2 cursor-pointer"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    data-testid={`faq-toggle-${idx}`}
+                    className="w-full px-4 py-3 text-left flex items-center justify-between gap-3 hover:bg-[#EFECE4] transition-colors cursor-pointer"
                   >
-                    <div>
-                      <span className="block text-[11px] font-mono-tabular text-[#D95338] mb-0.5">
-                        {faq.category}
-                      </span>
-                      <span className="font-display text-lg font-bold text-[#1E3A2B]">
-                        {faq.question}
-                      </span>
-                    </div>
+                    <span className="font-serif text-xs sm:text-sm font-bold text-[#14281D] leading-snug">
+                      {faq.question}
+                    </span>
                     <ChevronDown
-                      className={`w-5 h-5 text-[#4C5520] shrink-0 transition-transform duration-150 ${
-                        isOpen ? 'rotate-180' : ''
+                      className={`w-4 h-4 text-[#4A554E] shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-[#B84A27]' : ''
                       }`}
-                      aria-hidden="true"
                     />
                   </button>
                   {isOpen && (
-                    <div className="pt-2 pb-3 pr-8 text-sm text-[#2D3819] leading-relaxed">
+                    <div className="px-4 pb-3.5 pt-1 text-xs text-[#4A554E] leading-relaxed border-t border-[#E2DDD2]">
                       {faq.answer}
                     </div>
                   )}

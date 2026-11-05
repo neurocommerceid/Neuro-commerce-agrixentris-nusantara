@@ -1,179 +1,122 @@
 import React, { useState } from 'react';
+import {
+  Briefcase,
+  PackageCheck,
+  Sprout,
+  Cpu,
+  Check,
+  ChevronDown,
+  ArrowUpRight,
+} from 'lucide-react';
 import { BUSINESS_PILLARS } from '../data/agrixentrisData';
-import { ArrowUpRight, Eye } from 'lucide-react';
+
+const PILLAR_ICONS: Record<string, React.ReactNode> = {
+  '01': <Briefcase className="w-4 h-4" />,
+  '02': <PackageCheck className="w-4 h-4" />,
+  '03': <Sprout className="w-4 h-4" />,
+  '04': <Cpu className="w-4 h-4" />,
+};
 
 export const BusinessModelSection: React.FC = () => {
-  const [activePillarIndex, setActivePillarIndex] = useState<number>(0);
-  const [showDiagramModal, setShowDiagramModal] = useState<boolean>(false);
+  const [expandedNum, setExpandedNum] = useState<string | null>(null);
 
-  const activePillar = BUSINESS_PILLARS[activePillarIndex];
+  const togglePillar = (num: string) => {
+    setExpandedNum((prev) => (prev === num ? null : num));
+  };
 
   return (
-    <section
-      id="model-bisnis"
-      className="bg-[#F0E5D7] border-b border-[#E5D5C0] py-16 lg:py-24"
-    >
-      <div className="max-w-[1360px] mx-auto px-6">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold text-[#4C5520] mb-2">
-              04. Skema Model Bisnis Terintegrasi
+    <section id="model-bisnis" className="py-10 sm:py-14 bg-[#FDFBF7] border-b border-[#E2DDD2]">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#B84A27] mb-1">
+              Ekosistem Terintegrasi
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3A2B] leading-tight">
-              Empat Pilar Lini Bisnis yang Saling Terhubung dalam Satu Ekosistem.
+            <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#14281D]">
+              4 Pilar Model Bisnis Utama
             </h2>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowDiagramModal((prev) => !prev)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#1E3A2B] bg-[#FAF6F1] hover:bg-[#EADDCC] border border-[#E5D5C0] rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
-          >
-            <Eye className="w-3.5 h-3.5 text-[#4C5520]" aria-hidden="true" />
-            <span>
-              {showDiagramModal
-                ? 'Sembunyikan Infografis Skema Asli'
-                : 'Lihat Infografis Skema Model Bisnis'}
-            </span>
-          </button>
+          <p className="text-xs text-[#4A554E]">
+            Klik panah pada kartu pilar untuk melihat rincian layanan.
+          </p>
         </div>
 
-        {showDiagramModal && (
-          <div className="mb-10 bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-sm font-semibold text-[#1E3A2B]">
-                  Infografis Resmi Skema Model Bisnis Terintegrasi (Halaman 5 Company Profile)
-                </h3>
-                <p className="text-xs text-[#4C5520]">
-                  Keempat pilar saling mendukung dari perencanaan lahan, suplai sarana produksi, pelatihan SDM, hingga digitalisasi monitoring.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowDiagramModal(false)}
-                className="text-xs font-semibold text-[#D95338] hover:underline cursor-pointer"
+        {/* Compact 2-Column Grid on Mobile & 4-Column on Desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          {BUSINESS_PILLARS.map((pillar) => {
+            const isOpen = expandedNum === pillar.number;
+            return (
+              <div
+                key={pillar.number}
+                className="bg-[#F6F4EE] border border-[#D8D2C5] rounded-xl overflow-hidden flex flex-col justify-between transition-all"
               >
-                Tutup Pratinjau
-              </button>
-            </div>
-            <div className="max-h-[540px] overflow-auto rounded-lg border border-[#E5D5C0] bg-[#1E3A2B]/5 flex justify-center p-4">
-              <img
-                src="/assets/compro/img_11.jpg"
-                alt="Skema Model Bisnis Terintegrasi AgriXentris Nusantara"
-                referrerPolicy="no-referrer"
-                className="max-h-[480px] w-auto object-contain rounded"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Interactive 4-Pillar Tabs + Detailed Split View */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left Column: 4 Pillar Selector Buttons */}
-          <div className="lg:col-span-5 flex flex-col gap-3">
-            {BUSINESS_PILLARS.map((pillar, idx) => {
-              const isSelected = idx === activePillarIndex;
-              return (
-                <button
-                  key={pillar.number}
-                  type="button"
-                  onClick={() => setActivePillarIndex(idx)}
-                  className={`text-left p-5 rounded-xl border transition-all duration-150 cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#1E3A2B] text-[#FAF6F1] border-[#1E3A2B]'
-                      : 'bg-[#FAF6F1] text-[#2D3819] border-[#E5D5C0] hover:bg-[#EADDCC]/70'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span
-                      className={`font-mono-tabular text-xs font-semibold ${
-                        isSelected ? 'text-[#EADDCC]' : 'text-[#D95338]'
-                      }`}
-                    >
+                <div>
+                  {/* Compact Photo Header */}
+                  <div className="relative h-24 sm:h-32 overflow-hidden bg-[#14281D]">
+                    <img
+                      src={pillar.image}
+                      alt={pillar.title}
+                      className="w-full h-full object-cover opacity-85"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B13]/80 via-transparent to-transparent" />
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-[#14281D]/85 text-[#FDFBF7] font-mono text-[10px]">
                       Pilar {pillar.number}
                     </span>
-                    <span
-                      className={`text-xs ${
-                        isSelected ? 'text-[#EADDCC]' : 'text-[#4C5520]'
-                      }`}
+                    <div className="absolute bottom-2 right-2 w-7 h-7 rounded-lg bg-[#FDFBF7]/90 text-[#14281D] flex items-center justify-center">
+                      {PILLAR_ICONS[pillar.number]}
+                    </div>
+                  </div>
+
+                  {/* Compact Title & Toggle */}
+                  <div className="p-3 sm:p-4">
+                    <p className="text-[10px] font-mono uppercase tracking-wider text-[#B84A27] truncate mb-0.5">
+                      {pillar.representation}
+                    </p>
+                    <h3 className="font-serif text-xs sm:text-base font-bold text-[#14281D] leading-snug line-clamp-2 min-h-[2.25rem]">
+                      {pillar.title}
+                    </h3>
+
+                    <button
+                      type="button"
+                      onClick={() => togglePillar(pillar.number)}
+                      className="mt-2.5 w-full pt-2 border-t border-[#E2DDD2] flex items-center justify-between text-[11px] font-semibold text-[#14281D] hover:text-[#B84A27] transition-colors cursor-pointer"
                     >
-                      {pillar.representation.split(',')[0]}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-lg font-bold">
-                    {pillar.title}
-                  </h3>
-                </button>
-              );
-            })}
-          </div>
+                      <span>{isOpen ? 'Tutup rincian' : `${pillar.services.length} layanan`}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? 'rotate-180 text-[#B84A27]' : ''
+                        }`}
+                      />
+                    </button>
 
-          {/* Right Column: Active Pillar Deep-Dive Card */}
-          <div className="lg:col-span-7 bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-7 lg:p-9 flex flex-col justify-between">
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-[#E5D5C0] text-xs text-[#4C5520]">
-                <span>Pilar Lini Bisnis {activePillar.number} dari 04</span>
-                <span>·</span>
-                <span>Representasi: {activePillar.representation}</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start mb-6">
-                <div className="md:col-span-7">
-                  <h3 className="font-display text-2xl font-bold text-[#1E3A2B] mb-3">
-                    {activePillar.title}
-                  </h3>
-                  <p className="text-sm text-[#3A3C31] leading-relaxed mb-5">
-                    {activePillar.summary}
-                  </p>
-
-                  <h4 className="text-xs font-semibold text-[#4C5520] mb-2.5">
-                    Cakupan Layanan &amp; Operasional:
-                  </h4>
-                  <ul className="space-y-2">
-                    {activePillar.services.map((service) => (
-                      <li
-                        key={service}
-                        className="flex items-start gap-2.5 text-sm text-[#2D3819]"
-                      >
-                        <span className="font-mono-tabular text-xs font-bold text-[#D95338] mt-0.5">
-                          &rarr;
-                        </span>
-                        <span>{service}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="md:col-span-5">
-                  <div className="rounded-xl overflow-hidden border border-[#E5D5C0] h-56 bg-[#1E3A2B]">
-                    <img
-                      src={activePillar.image}
-                      alt={activePillar.title}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover"
-                    />
+                    {isOpen && (
+                      <div className="mt-2.5 pt-2 border-t border-[#E2DDD2] space-y-1.5">
+                        <p className="text-[11px] text-[#4A554E] leading-relaxed mb-2">
+                          {pillar.summary}
+                        </p>
+                        {pillar.services.map((service) => (
+                          <div key={service} className="flex items-start gap-1.5 text-[11px] text-[#14281D]">
+                            <Check className="w-3 h-3 text-[#2D6A4F] shrink-0 mt-0.5" />
+                            <span className="leading-tight">{service}</span>
+                          </div>
+                        ))}
+                        {pillar.number === '02' && (
+                          <a
+                            href="#katalog"
+                            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#B84A27] hover:underline"
+                          >
+                            Buka Katalog 7 SKU
+                            <ArrowUpRight className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="pt-5 border-t border-[#E5D5C0] flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-xs text-[#4C5520]">Output Utama Lini Bisnis:</p>
-                <p className="text-xs font-semibold text-[#1E3A2B]">
-                  {activePillar.deliverable}
-                </p>
-              </div>
-              <a
-                href="#kontak"
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#FAF6F1] bg-[#4C5520] hover:bg-[#1E3A2B] rounded-lg transition-colors whitespace-nowrap shrink-0"
-              >
-                <span>Konsultasikan Lini Ini</span>
-                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

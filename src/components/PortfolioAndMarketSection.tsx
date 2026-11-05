@@ -1,260 +1,252 @@
 import React, { useState } from 'react';
+import { CheckCircle2, ChevronDown, Target, Layers, TrendingUp } from 'lucide-react';
 import {
+  COMPANY_PROFILE,
   PORTFOLIO_PROGRAMS,
   TARGET_MARKETS,
-  COMPANY_PROFILE,
 } from '../data/agrixentrisData';
-import { Eye } from 'lucide-react';
 
 export const PortfolioAndMarketSection: React.FC = () => {
-  const [activeMarketId, setActiveMarketId] = useState<string>(TARGET_MARKETS[0].id);
-  const [showPortfolioDiagram, setShowPortfolioDiagram] = useState<boolean>(false);
+  const [expandedPortfolio, setExpandedPortfolio] = useState<string | null>(null);
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
-  const selectedMarket =
-    TARGET_MARKETS.find((m) => m.id === activeMarketId) || TARGET_MARKETS[0];
+  const togglePortfolioCard = (id: string) => {
+    setExpandedPortfolio((prev) => (prev === id ? null : id));
+  };
+
+  const toggleSection = (key: string) => {
+    setOpenSection((prev) => (prev === key ? null : key));
+  };
 
   return (
-    <section
-      id="portofolio"
-      className="bg-[#F0E5D7] border-b border-[#E5D5C0] py-16 lg:py-24"
-    >
-      <div className="max-w-[1360px] mx-auto px-6">
-        {/* 05. Portofolio & Pengalaman Program */}
-        <div className="flex flex-wrap items-end justify-between gap-6 pb-10 border-b border-[#E5D5C0]">
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold text-[#4C5520] mb-2">
-              05. Portofolio &amp; Pengalaman Program
+    <section id="portofolio" className="py-10 sm:py-14 bg-[#FDFBF7] border-b border-[#E2DDD2]">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#B84A27] mb-1">
+              Rekam Jejak &amp; Peta Jalan
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3A2B] leading-tight">
-              Rekam Jejak Pendampingan, Pelatihan SDM &amp; Produksi Komersial.
+            <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#14281D]">
+              Portofolio Program &amp; Rencana Strategis
             </h2>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowPortfolioDiagram((prev) => !prev)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-[#1E3A2B] bg-[#FAF6F1] hover:bg-[#EADDCC] border border-[#E5D5C0] rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
-          >
-            <Eye className="w-3.5 h-3.5 text-[#4C5520]" aria-hidden="true" />
-            <span>
-              {showPortfolioDiagram
-                ? 'Sembunyikan Infografis Portofolio & Pasar'
-                : 'Lihat Infografis Portofolio & Strategi Pasar'}
-            </span>
-          </button>
+          <p className="text-xs text-[#4A554E]">
+            4 klaster proyek utama. Klik panah untuk rincian teknis.
+          </p>
         </div>
 
-        {showPortfolioDiagram && (
-          <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-6">
-            <div>
-              <h3 className="text-xs font-semibold text-[#1E3A2B] mb-2">
-                Infografis Portofolio &amp; Pengalaman Program (Halaman 6 PDF)
-              </h3>
-              <img
-                src="/assets/compro/img_20.jpg"
-                alt="Infografis Portofolio dan Pengalaman Program AgriXentris Nusantara"
-                referrerPolicy="no-referrer"
-                className="w-full max-h-[440px] object-contain rounded-lg border border-[#E5D5C0]"
-              />
-            </div>
-            <div>
-              <h3 className="text-xs font-semibold text-[#1E3A2B] mb-2">
-                Infografis Target Market &amp; Strategi Pasar (Halaman 7 PDF)
-              </h3>
-              <img
-                src="/assets/compro/img_25.jpg"
-                alt="Infografis Target Market AgriXentris Nusantara"
-                referrerPolicy="no-referrer"
-                className="w-full max-h-[440px] object-contain rounded-lg border border-[#E5D5C0]"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* 4 Portfolio Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-12 border-b border-[#E5D5C0]">
-          {PORTFOLIO_PROGRAMS.map((prog, index) => (
-            <article
-              key={prog.id}
-              className="bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl overflow-hidden flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative h-56 bg-[#1E3A2B] overflow-hidden">
-                  <img
-                    src={prog.image}
-                    alt={prog.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex flex-col justify-end p-5">
-                    <div className="text-xs text-[#EADDCC] font-mono-tabular mb-1">
-                      0{index + 1} · {prog.category} · {prog.locationHighlight}
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-white">
-                      {prog.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <p className="text-xs font-semibold text-[#4C5520] mb-3">
-                    Skala Implementasi: {prog.scale}
-                  </p>
-                  <ul className="space-y-2">
-                    {prog.points.map((pt) => (
-                      <li
-                        key={pt}
-                        className="text-sm text-[#2D3819] flex items-start gap-2.5"
-                      >
-                        <span className="font-mono-tabular text-xs font-bold text-[#D95338] mt-0.5">
-                          &rarr;
-                        </span>
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="px-6 py-3.5 bg-[#F0E5D7]/60 border-t border-[#E5D5C0] text-xs font-medium text-[#1E3A2B]">
-                <strong className="text-[#4C5520]">Hasil Terukur:</strong>{' '}
-                {prog.impactMetric}
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* 06. Keunggulan Kompetitif & Target Market */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 py-14 border-b border-[#E5D5C0] items-stretch">
-          <div className="lg:col-span-5 flex flex-col justify-between bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-7">
-            <div>
-              <p className="text-xs font-semibold text-[#D95338] mb-2">
-                06. Keunggulan Kompetitif
-              </p>
-              <h3 className="font-display text-2xl font-bold text-[#1E3A2B] mb-5">
-                Standar Operasional Berbasis Riset &amp; SOP Terukur
-              </h3>
-
-              <ul className="space-y-3">
-                {COMPANY_PROFILE.competitiveAdvantages.map((adv, idx) => (
-                  <li
-                    key={adv}
-                    className="flex items-start gap-3 text-sm text-[#2D3819] pb-3 border-b border-[#E5D5C0] last:border-b-0"
-                  >
-                    <span className="font-mono-tabular text-xs font-bold text-[#4C5520] mt-0.5">
-                      0{idx + 1}.
-                    </span>
-                    <span>{adv}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-[#E5D5C0] text-xs text-[#4C5520]">
-              Strategi pasar terintegrasi berbasis data memastikan penyusunan SOP dan monitoring proyek berjalan presisi.
-            </div>
-          </div>
-
-          <div className="lg:col-span-7 flex flex-col justify-between bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-7">
-            <div>
-              <p className="text-xs font-semibold text-[#4C5520] mb-2">
-                Segmen Mitra &amp; Target Market
-              </p>
-              <h3 className="font-display text-2xl font-bold text-[#1E3A2B] mb-5">
-                4 Kelompok Mitra Strategis AgriXentris Nusantara
-              </h3>
-
-              {/* Target Market Selector Tabs */}
+        {/* Compact 2-Column Mobile / 4-Column Desktop Portfolio Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-5">
+          {PORTFOLIO_PROGRAMS.map((program, idx) => {
+            const isOpen = expandedPortfolio === program.id;
+            return (
               <div
-                role="group"
-                aria-label="Pilih Segmen Target Market"
-                className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6"
-              >
-                {TARGET_MARKETS.map((tm) => {
-                  const isActive = tm.id === selectedMarket.id;
-                  return (
-                    <button
-                      key={tm.id}
-                      type="button"
-                      onClick={() => setActiveMarketId(tm.id)}
-                      className={`p-3.5 rounded-lg border text-left transition-colors cursor-pointer ${
-                        isActive
-                          ? 'bg-[#1E3A2B] text-[#FAF6F1] border-[#1E3A2B]'
-                          : 'bg-[#F0E5D7]/60 text-[#2D3819] border-[#E5D5C0] hover:bg-[#EADDCC]'
-                      }`}
-                    >
-                      <span className="block text-xs font-bold leading-snug">
-                        {tm.title}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Active Target Market Detail */}
-              <div className="p-5 rounded-xl bg-[#F0E5D7]/70 border border-[#E5D5C0]">
-                <p className="text-xs text-[#4C5520] mb-1">
-                  {selectedMarket.subtitle}
-                </p>
-                <h4 className="font-display text-xl font-bold text-[#1E3A2B] mb-4">
-                  {selectedMarket.title}
-                </h4>
-
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                  {selectedMarket.offerings.map((off) => (
-                    <li
-                      key={off}
-                      className="bg-[#FAF6F1] border border-[#E5D5C0] rounded-lg p-3 text-xs font-medium text-[#2D3819]"
-                    >
-                      {off}
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="text-xs text-[#1E3A2B]">
-                  <strong>Dampak Kemitraan:</strong> {selectedMarket.outcome}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 07. Rencana Pengembangan Usaha 5 Tahun ke Depan */}
-        <div className="pt-14">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-semibold text-[#4C5520] mb-1">
-                07. Peta Jalan Ekspansi (5 Tahun ke Depan)
-              </p>
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#1E3A2B]">
-                Rencana Pengembangan Usaha AgriXentris Nusantara
-              </h3>
-            </div>
-            <p className="text-xs text-[#4C5520] max-w-md">
-              Lima target strategis perusahaan dalam memperluas ekosistem layanan pertanian modern secara nasional.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {COMPANY_PROFILE.fiveYearRoadmap.map((milestone, idx) => (
-              <div
-                key={milestone.step}
-                className="bg-[#FAF6F1] border border-[#E5D5C0] rounded-xl p-5 flex flex-col justify-between"
+                key={program.id}
+                className="bg-[#F6F4EE] border border-[#D8D2C5] rounded-xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono-tabular text-[#D95338] font-bold mb-2">
-                    <span>Target 0{idx + 1}</span>
-                    <span>{milestone.step}</span>
+                  <div className="relative h-24 sm:h-32 overflow-hidden bg-[#14281D]">
+                    <img
+                      src={program.image}
+                      alt={program.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B13]/80 via-transparent to-transparent" />
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-[#14281D]/85 text-[#FDFBF7] font-mono text-[10px]">
+                      Proyek 0{idx + 1}
+                    </span>
                   </div>
-                  <h4 className="font-display text-base font-bold text-[#1E3A2B] mb-2">
-                    {milestone.title}
-                  </h4>
-                  <p className="text-xs text-[#3A3C31] leading-relaxed">
-                    {milestone.detail}
+
+                  <div className="p-3 sm:p-4">
+                    <span className="block text-[10px] font-mono uppercase tracking-wider text-[#B84A27] truncate mb-0.5">
+                      {program.category}
+                    </span>
+                    <h3 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] leading-snug line-clamp-2 min-h-[2rem]">
+                      {program.title}
+                    </h3>
+
+                    <button
+                      type="button"
+                      onClick={() => togglePortfolioCard(program.id)}
+                      className="mt-2.5 w-full pt-2 border-t border-[#E2DDD2] flex items-center justify-between text-[11px] font-semibold text-[#14281D] hover:text-[#B84A27] transition-colors cursor-pointer"
+                    >
+                      <span>{isOpen ? 'Tutup detail' : 'Lihat cakupan'}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? 'rotate-180 text-[#B84A27]' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="mt-2 pt-2 border-t border-[#E2DDD2] space-y-1.5">
+                        <p className="text-[10px] font-mono text-[#68736B]">
+                          Lokasi: {program.locationHighlight}
+                        </p>
+                        <ul className="space-y-1">
+                          {program.points.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-1.5 text-[11px] text-[#4A554E] leading-tight"
+                            >
+                              <CheckCircle2 className="w-3 h-3 text-[#2D6A4F] shrink-0 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Collapsible Strategic Accordions (Competitive Advantage, Target Market, 5-Year Roadmap) */}
+        <div className="space-y-2.5">
+          {/* 1. Keunggulan Kompetitif */}
+          <div className="bg-[#F6F4EE] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleSection('advantages')}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#EFECE4] transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#14281D]/10 text-[#14281D] flex items-center justify-center shrink-0">
+                  <Layers className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    6 Keunggulan Kompetitif AgriXentris
+                  </h3>
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Pendekatan ilmiah · Tim multidisiplin · Solusi terintegrasi hulu-hilir
                   </p>
                 </div>
               </div>
-            ))}
+              <ChevronDown
+                className={`w-4 h-4 text-[#14281D] shrink-0 transition-transform duration-200 ${
+                  openSection === 'advantages' ? 'rotate-180 text-[#B84A27]' : ''
+                }`}
+              />
+            </button>
+
+            {openSection === 'advantages' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E2DDD2] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {COMPANY_PROFILE.competitiveAdvantages.map((adv, index) => (
+                  <div
+                    key={adv}
+                    className="p-3 rounded-lg bg-[#FDFBF7] border border-[#E2DDD2] flex items-start gap-2"
+                  >
+                    <span className="font-mono text-[10px] font-semibold text-[#B84A27] shrink-0 mt-0.5">
+                      0{index + 1}
+                    </span>
+                    <p className="text-xs text-[#14281D] leading-snug">{adv}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 2. Segmen Target Market */}
+          <div className="bg-[#F6F4EE] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleSection('markets')}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#EFECE4] transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#B84A27]/10 text-[#B84A27] flex items-center justify-center shrink-0">
+                  <Target className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    4 Segmen Target Market Utama
+                  </h3>
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Investor &amp; Korporasi · Pemerintah Daerah · Kelompok Tani · Lembaga Edukasi
+                  </p>
+                </div>
+              </div>
+              <ChevronDown
+                className={`w-4 h-4 text-[#14281D] shrink-0 transition-transform duration-200 ${
+                  openSection === 'markets' ? 'rotate-180 text-[#B84A27]' : ''
+                }`}
+              />
+            </button>
+
+            {openSection === 'markets' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E2DDD2] grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+                {TARGET_MARKETS.map((segment, idx) => (
+                  <div
+                    key={segment.id}
+                    className="p-3 rounded-lg bg-[#FDFBF7] border border-[#E2DDD2]"
+                  >
+                    <span className="font-mono text-[10px] text-[#68736B]">Segmen 0{idx + 1}</span>
+                    <h4 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] mt-0.5 mb-1">
+                      {segment.title}
+                    </h4>
+                    <p className="text-[11px] text-[#4A554E] leading-snug mb-2">
+                      {segment.subtitle}
+                    </p>
+                    <p className="text-[10px] font-semibold text-[#2D6A4F] pt-1.5 border-t border-[#E2DDD2]">
+                      {segment.outcome}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 3. Rencana Pengembangan 5 Tahun */}
+          <div className="bg-[#F6F4EE] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleSection('roadmap')}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#EFECE4] transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#2D6A4F]/10 text-[#2D6A4F] flex items-center justify-center shrink-0">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    Rencana Pengembangan 5 Tahun Ke Depan
+                  </h3>
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Demo-plot modern · Ekspansi layanan · Platform IoT · Kemitraan komersial · Distribusi
+                  </p>
+                </div>
+              </div>
+              <ChevronDown
+                className={`w-4 h-4 text-[#14281D] shrink-0 transition-transform duration-200 ${
+                  openSection === 'roadmap' ? 'rotate-180 text-[#B84A27]' : ''
+                }`}
+              />
+            </button>
+
+            {openSection === 'roadmap' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E2DDD2] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+                {COMPANY_PROFILE.fiveYearRoadmap.map((step, idx) => (
+                  <div
+                    key={step.step}
+                    className="p-3 rounded-lg bg-[#FDFBF7] border border-[#E2DDD2]"
+                  >
+                    <div className="flex items-center justify-between font-mono text-[10px] text-[#B84A27] mb-1">
+                      <span>Target 0{idx + 1}</span>
+                      <span>{step.step}</span>
+                    </div>
+                    <h4 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] mb-1">
+                      {step.title}
+                    </h4>
+                    <p className="text-[11px] text-[#4A554E] leading-snug">{step.detail}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

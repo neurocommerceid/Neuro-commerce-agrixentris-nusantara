@@ -1,209 +1,255 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ChevronDown, CheckCircle2, ShieldCheck, Sprout, Award, Compass } from 'lucide-react';
 import { COMPANY_PROFILE } from '../data/agrixentrisData';
 
 export const AboutAndVisionSection: React.FC = () => {
+  const [openPanel, setOpenPanel] = useState<string | null>(null);
+
+  const togglePanel = (id: string) => {
+    setOpenPanel((prev) => (prev === id ? null : id));
+  };
+
   return (
-    <section
-      id="profil"
-      className="bg-[#FAF6F1] border-b border-[#E5D5C0] py-16 lg:py-24"
-    >
-      <div className="max-w-[1360px] mx-auto px-6">
-        {/* Section Editorial Header (Northeast Tomato "California tomatoes. New Jersey canning." rhythm) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-14 border-b border-[#E5D5C0] items-start">
-          <div className="lg:col-span-5">
-            <p className="text-xs font-semibold text-[#4C5520] mb-2">
-              01. Perkenalan &amp; Tentang Kami
+    <section id="tentang" className="py-10 sm:py-14 bg-[#F6F4EE] border-b border-[#E2DDD2]">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+        {/* Compact Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#B84A27] mb-1">
+              Profil Korporat · Est. {COMPANY_PROFILE.foundedYear}
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3A2B] leading-tight mb-4">
-              Riset Akademik Bogor. Eksekusi Lapangan Nasional.
+            <h2 className="font-serif text-xl sm:text-3xl font-bold text-[#14281D]">
+              Identitas, Visi &amp; Nilai Perusahaan
             </h2>
-            <p className="text-sm text-[#4C5520] leading-relaxed">
-              {COMPANY_PROFILE.philosophy}
+          </div>
+          <p className="text-xs text-[#4A554E]">
+            Klik panah pada setiap baris untuk membaca detail profil.
+          </p>
+        </div>
+
+        {/* Compact 2x2 Identity Summary Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 mb-5">
+          <div className="bg-[#FDFBF7] border border-[#E2DDD2] rounded-xl p-3 sm:p-4">
+            <span className="block text-[10px] uppercase tracking-wider text-[#68736B] mb-0.5">
+              Entitas Resmi
+            </span>
+            <p className="font-serif text-xs sm:text-sm font-bold text-[#14281D] line-clamp-1">
+              {COMPANY_PROFILE.name}
             </p>
+            <span className="text-[11px] text-[#4A554E] line-clamp-1">
+              Berdiri {COMPANY_PROFILE.foundedYear}
+            </span>
           </div>
 
-          <div className="lg:col-span-7 space-y-6">
-            <p className="text-base text-[#2D3819] leading-relaxed">
-              {COMPANY_PROFILE.introParagraph2}
+          <div className="bg-[#FDFBF7] border border-[#E2DDD2] rounded-xl p-3 sm:p-4">
+            <span className="block text-[10px] uppercase tracking-wider text-[#68736B] mb-0.5">
+              Bidang Usaha
+            </span>
+            <p className="font-serif text-xs sm:text-sm font-bold text-[#14281D] line-clamp-1">
+              Konsultasi &amp; Saprodi
             </p>
+            <span className="text-[11px] text-[#4A554E] line-clamp-1">
+              Layanan Hulu ke Hilir
+            </span>
+          </div>
 
-            {/* Official Corporate Identity Grid from PDF Page 3 */}
-            <div className="bg-[#F0E5D7]/80 border border-[#E5D5C0] rounded-xl p-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 pb-4 mb-4 border-b border-[#E5D5C0]">
-                <div>
-                  <h3 className="text-base font-semibold text-[#1E3A2B]">
-                    Identitas Resmi Perusahaan
+          <div className="bg-[#FDFBF7] border border-[#E2DDD2] rounded-xl p-3 sm:p-4">
+            <span className="block text-[10px] uppercase tracking-wider text-[#68736B] mb-0.5">
+              Kantor Pusat
+            </span>
+            <p className="font-serif text-xs sm:text-sm font-bold text-[#14281D] line-clamp-1">
+              Dramaga, Bogor
+            </p>
+            <span className="text-[11px] text-[#4A554E] line-clamp-1">
+              Sinarsari, Jawa Barat
+            </span>
+          </div>
+
+          <div className="bg-[#FDFBF7] border border-[#E2DDD2] rounded-xl p-3 sm:p-4">
+            <span className="block text-[10px] uppercase tracking-wider text-[#68736B] mb-0.5">
+              Filosofi Nama
+            </span>
+            <p className="font-serif text-xs sm:text-sm font-bold text-[#14281D] line-clamp-1">
+              Agri + Xentris
+            </p>
+            <span className="text-[11px] text-[#4A554E] line-clamp-1">
+              Centered Agricultural Hub
+            </span>
+          </div>
+        </div>
+
+        {/* 3 Collapsible Corporate Disclosure Rows (Hidden by Default) */}
+        <div className="space-y-2.5">
+          {/* Panel 1: Tentang Kami & 3 Keunggulan Utama */}
+          <div className="bg-[#FDFBF7] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => togglePanel('about')}
+              data-testid="accordion-about"
+              aria-expanded={openPanel === 'about'}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#F3EFE6]/60 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#14281D]/10 text-[#14281D] flex items-center justify-center shrink-0">
+                  <Sprout className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    Tentang Kami &amp; Mengapa Memilih AgriXentris
                   </h3>
-                  <p className="text-xs text-[#4C5520]">
-                    Sesuai dokumen Company Profile AgriXentris Nusantara
-                  </p>
-                </div>
-                <span className="font-mono-tabular text-xs font-semibold text-[#2D3819]">
-                  Est. {COMPANY_PROFILE.foundedYear} · Dramaga, Bogor
-                </span>
-              </div>
-
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-                <div>
-                  <dt className="text-xs text-[#4C5520]">Nama Perusahaan</dt>
-                  <dd className="font-semibold text-[#1E3A2B] mt-0.5">
-                    {COMPANY_PROFILE.name}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#4C5520]">Bidang Usaha</dt>
-                  <dd className="font-semibold text-[#1E3A2B] mt-0.5">
-                    {COMPANY_PROFILE.legalField}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#4C5520]">Kantor Pusat</dt>
-                  <dd className="font-medium text-[#2D3819] mt-0.5">
-                    {COMPANY_PROFILE.headquarters}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-[#4C5520]">Kontak &amp; Korespondensi</dt>
-                  <dd className="font-mono-tabular text-xs font-medium text-[#2D3819] mt-0.5">
-                    {COMPANY_PROFILE.email} · {COMPANY_PROFILE.phone}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        </div>
-
-        {/* Core Values (5 Nilai Utama) */}
-        <div className="py-14 border-b border-[#E5D5C0]">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-semibold text-[#4C5520] mb-1">
-                Nilai Dasar Operasional
-              </p>
-              <h3 className="font-display text-2xl font-bold text-[#1E3A2B]">
-                5 Core Values AgriXentris Nusantara
-              </h3>
-            </div>
-            <p className="text-xs text-[#4C5520] max-w-md">
-              Nilai ini menjadi dasar setiap keputusan bisnis, pengadaan sarana produksi, dan supervisi operasional perusahaan di lapangan.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {COMPANY_PROFILE.coreValues.map((val, idx) => (
-              <div
-                key={val.name}
-                className="bg-[#F0E5D7]/50 border border-[#E5D5C0] rounded-xl p-5 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="font-mono-tabular text-xs font-semibold text-[#D95338]">
-                    0{idx + 1}.
-                  </span>
-                  <h4 className="font-display text-lg font-bold text-[#1E3A2B] mt-1 mb-2">
-                    {val.name}
-                  </h4>
-                  <p className="text-xs text-[#3A3C31] leading-relaxed">
-                    {val.desc}
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Filosofi perusahaan, latar belakang akademik Bogor &amp; 3 fokus pendekatan
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Visi & 5 Misi + Real Photography Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 py-14 border-b border-[#E5D5C0] items-stretch">
-          <div className="lg:col-span-5 flex flex-col justify-between bg-[#1E3A2B] text-[#FAF6F1] rounded-xl p-8">
-            <div>
-              <p className="text-xs font-medium text-[#EADDCC] mb-2">
-                02. Visi Perusahaan
-              </p>
-              <h3 className="font-display text-2xl sm:text-3xl font-bold leading-snug mb-6">
-                &ldquo;{COMPANY_PROFILE.vision}&rdquo;
-              </h3>
-              <p className="text-xs text-[#EADDCC] leading-relaxed">
-                Menghadirkan standar baru agribisnis Indonesia melalui perpaduan sains agronomi, kualitas sarana produksi, dan tata kelola investasi yang akuntabel.
-              </p>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-white/15 grid grid-cols-2 gap-4">
-              <div className="rounded-lg overflow-hidden h-28 border border-white/15">
-                <img
-                  src="/assets/compro/img_5.jpg"
-                  alt="Lahan pertanian presisi AgriXentris"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#14281D] shrink-0">
+                <span className="hidden sm:inline">{openPanel === 'about' ? 'Tutup' : 'Baca'}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    openPanel === 'about' ? 'rotate-180 text-[#B84A27]' : ''
+                  }`}
                 />
+              </span>
+            </button>
+
+            {openPanel === 'about' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E6E1D6] space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-[#4A554E] leading-relaxed">
+                  <p>{COMPANY_PROFILE.philosophy}</p>
+                  <p>{COMPANY_PROFILE.introParagraph2}</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                  {COMPANY_PROFILE.whyUs.map((pillar) => (
+                    <div
+                      key={pillar.number}
+                      className="p-3 rounded-lg bg-[#F6F4EE] border border-[#E2DDD2]"
+                    >
+                      <span className="font-mono text-[10px] font-semibold text-[#B84A27]">
+                        {pillar.number}
+                      </span>
+                      <h4 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] mt-0.5 mb-1">
+                        {pillar.title}
+                      </h4>
+                      <p className="text-[11px] text-[#4A554E] leading-relaxed">
+                        {pillar.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="rounded-lg overflow-hidden h-28 border border-white/15">
-                <img
-                  src="/assets/compro/img_4.jpg"
-                  alt="Pendampingan SDM petani di lapangan"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+            )}
           </div>
 
-          <div className="lg:col-span-7 flex flex-col justify-between">
-            <div>
-              <p className="text-xs font-semibold text-[#4C5520] mb-2">
-                03. Misi Strategis Perusahaan
-              </p>
-              <h3 className="font-display text-2xl font-bold text-[#1E3A2B] mb-6">
-                5 Langkah Konkret Membangun Ekosistem Pertanian
-              </h3>
-
-              <ol className="space-y-3">
-                {COMPANY_PROFILE.missions.map((mission, index) => (
-                  <li
-                    key={mission}
-                    className="flex items-start gap-4 p-4 rounded-xl bg-[#F0E5D7]/60 border border-[#E5D5C0]"
-                  >
-                    <span className="font-mono-tabular text-sm font-bold text-[#D95338] shrink-0 mt-0.5">
-                      0{index + 1}.
-                    </span>
-                    <span className="text-sm font-medium text-[#2D3819] leading-relaxed">
-                      {mission}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </div>
-
-        {/* Mengapa AgriXentris Nusantara (PDF Page 12 "WHY?") */}
-        <div className="pt-14">
-          <div className="mb-8">
-            <p className="text-xs font-semibold text-[#D95338] mb-1">
-              Keunggulan Pendekatan Kami
-            </p>
-            <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#1E3A2B]">
-              Mengapa Bermitra dengan AgriXentris Nusantara?
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {COMPANY_PROFILE.whyUs.map((item) => (
-              <div
-                key={item.number}
-                className="bg-[#F0E5D7] border border-[#E5D5C0] rounded-xl p-7 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="font-mono-tabular text-xs font-bold text-[#4C5520]">
-                    {item.number}. Fokus Keunggulan
-                  </span>
-                  <h4 className="font-display text-xl font-bold text-[#1E3A2B] mt-2 mb-3">
-                    {item.title}
-                  </h4>
-                  <p className="text-sm text-[#3A3C31] leading-relaxed">
-                    {item.description}
+          {/* Panel 2: Visi & 5 Misi Perusahaan */}
+          <div className="bg-[#FDFBF7] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => togglePanel('vision')}
+              data-testid="accordion-vision"
+              aria-expanded={openPanel === 'vision'}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#F3EFE6]/60 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#B84A27]/10 text-[#B84A27] flex items-center justify-center shrink-0">
+                  <Compass className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    Visi &amp; 5 Misi Strategis Perusahaan
+                  </h3>
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Menjadi perusahaan agribisnis terintegrasi terkemuka di Indonesia
                   </p>
                 </div>
               </div>
-            ))}
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#14281D] shrink-0">
+                <span className="hidden sm:inline">{openPanel === 'vision' ? 'Tutup' : 'Baca'}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    openPanel === 'vision' ? 'rotate-180 text-[#B84A27]' : ''
+                  }`}
+                />
+              </span>
+            </button>
+
+            {openPanel === 'vision' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E6E1D6] space-y-3">
+                <div className="p-3 rounded-lg bg-[#14281D] text-[#FDFBF7]">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#E07A5F] block mb-1">
+                    Visi Utama
+                  </span>
+                  <p className="font-serif text-xs sm:text-sm leading-relaxed">
+                    “{COMPANY_PROFILE.vision}”
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {COMPANY_PROFILE.missions.map((mission, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-2 p-2.5 rounded-lg bg-[#F6F4EE] border border-[#E2DDD2]"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#2D6A4F] shrink-0 mt-0.5" />
+                      <p className="text-xs text-[#14281D] leading-snug">{mission}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Panel 3: 5 Nilai Inti (Core Values) */}
+          <div className="bg-[#FDFBF7] border border-[#D8D2C5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => togglePanel('values')}
+              data-testid="accordion-values"
+              aria-expanded={openPanel === 'values'}
+              className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-[#F3EFE6]/60 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#2D6A4F]/10 text-[#2D6A4F] flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-[#14281D] truncate">
+                    5 Nilai Perusahaan (Core Values)
+                  </h3>
+                  <p className="text-[11px] text-[#68736B] truncate">
+                    Integrity · Profesional · Innovation · Collaboration · Sustainability
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#14281D] shrink-0">
+                <span className="hidden sm:inline">{openPanel === 'values' ? 'Tutup' : 'Baca'}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    openPanel === 'values' ? 'rotate-180 text-[#B84A27]' : ''
+                  }`}
+                />
+              </span>
+            </button>
+
+            {openPanel === 'values' && (
+              <div className="px-4 pb-4 pt-2 border-t border-[#E6E1D6]">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                  {COMPANY_PROFILE.coreValues.map((val, idx) => (
+                    <div
+                      key={val.name}
+                      className="p-3 rounded-lg bg-[#F6F4EE] border border-[#E2DDD2]"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-mono text-[10px] text-[#68736B]">0{idx + 1}</span>
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#2D6A4F]" />
+                      </div>
+                      <h4 className="font-serif text-xs sm:text-sm font-bold text-[#14281D] mb-1">
+                        {val.name}
+                      </h4>
+                      <p className="text-[11px] text-[#4A554E] leading-snug">{val.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

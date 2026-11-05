@@ -6,20 +6,18 @@
 import { useState } from 'react';
 import { ProductSKU, PRODUCT_CATALOG_7_SKU } from './data/agrixentrisData';
 import { CartItem, calculateCartSummary } from './utils/catalogLogic';
-import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { AboutAndVisionSection } from './components/AboutAndVisionSection';
-import { BusinessModelSection } from './components/BusinessModelSection';
+import { Navbar, PageId } from './components/Navbar';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { PortfolioPage } from './pages/PortfolioPage';
 import { ProductCatalogSection } from './components/ProductCatalogSection';
-import { ProductDetailModal } from './components/ProductDetailModal';
-import { PortfolioAndMarketSection } from './components/PortfolioAndMarketSection';
-import { InvestmentAndOrgSection } from './components/InvestmentAndOrgSection';
-import { TestimonialsAndFaqSection } from './components/TestimonialsAndFaqSection';
 import { InquiryAndOrderSection } from './components/InquiryAndOrderSection';
+import { ProductDetailModal } from './components/ProductDetailModal';
 import { OrderDrawerModal } from './components/OrderDrawerModal';
 import { Footer } from './components/Footer';
 
 export default function App() {
+  const [activePage, setActivePage] = useState<PageId>('home');
   const [cart, setCart] = useState<CartItem[]>([
     { skuId: 'sku-1', quantity: 10 },
     { skuId: 'sku-3', quantity: 2 },
@@ -72,43 +70,51 @@ export default function App() {
   const cartSummary = calculateCartSummary(cart, PRODUCT_CATALOG_7_SKU);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6F1] text-[#2D3819]">
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-[#FAF6F1] text-[#2D3819]">
       <Navbar
+        activePage={activePage}
+        onNavigate={setActivePage}
         cartCount={cartSummary.totalItemsCount}
         onOpenCartDrawer={() => setIsCartDrawerOpen(true)}
       />
 
-      <main className="flex-1">
-        <HeroSection
-          onSelectProduct={(product) => setSelectedProduct(product)}
-          onQuickAddProduct={(skuId, qty) => handleAddProductToCart(skuId, qty ?? 1)}
-        />
+      <main className="flex-1 w-full">
+        {activePage === 'home' && (
+          <HomePage
+            onNavigate={setActivePage}
+            onSelectProduct={(product) => setSelectedProduct(product)}
+            onQuickAddProduct={(skuId) => handleAddProductToCart(skuId, 1)}
+          />
+        )}
 
-        <AboutAndVisionSection />
+        {activePage === 'about' && <AboutPage onNavigate={setActivePage} />}
 
-        <BusinessModelSection />
+        {activePage === 'katalog' && (
+          <div>
+            <ProductCatalogSection
+              cart={cart}
+              onSelectProduct={(product) => setSelectedProduct(product)}
+              onAddProductToCart={handleAddProductToCart}
+              onOpenCartDrawer={() => setIsCartDrawerOpen(true)}
+            />
+            <InquiryAndOrderSection
+              cart={cart}
+              onUpdateCartQty={handleUpdateCartQty}
+              onClearCart={handleClearCart}
+            />
+          </div>
+        )}
 
-        <ProductCatalogSection
-          cart={cart}
-          onSelectProduct={(product) => setSelectedProduct(product)}
-          onAddProductToCart={handleAddProductToCart}
-          onOpenCartDrawer={() => setIsCartDrawerOpen(true)}
-        />
-
-        <PortfolioAndMarketSection />
-
-        <InvestmentAndOrgSection />
-
-        <TestimonialsAndFaqSection />
-
-        <InquiryAndOrderSection
-          cart={cart}
-          onUpdateCartQty={handleUpdateCartQty}
-          onClearCart={handleClearCart}
-        />
+        {activePage === 'portofolio' && (
+          <PortfolioPage
+            cart={cart}
+            onUpdateCartQty={handleUpdateCartQty}
+            onClearCart={handleClearCart}
+          />
+        )}
       </main>
 
-      <Footer />
+      <Footer activePage={activePage} onNavigate={setActivePage} />
 
       <ProductDetailModal
         product={selectedProduct}
