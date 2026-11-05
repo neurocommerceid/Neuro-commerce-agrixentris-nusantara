@@ -1,0 +1,6 @@
+{
+  "name": "AgriXentris Nusantara — Solusi Agribisnis & Katalog Pertanian Terintegrasi",
+  "description": "Profil resmi dan katalog produk sarana produksi pertanian terintegrasi AgriXentris Nusantara: konsultasi agribisnis, benih unggul, nutrisi hortikultura, pelatihan SDM, dan teknologi greenhouse modern.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

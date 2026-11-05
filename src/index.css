@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-linen: #FAF6F1;
+    --bg-beige: #F0E5D7;
+    --bg-warm-beige: #EADDCC;
+    --border-sand: #E5D5C0;
+    --text-leaf: #2D3819;
+    --brand-leaf: #4C5520;
+    --brand-forest: #1E3A2B;
+    --accent-harvest: #D95338;
+    --accent-gold: #D97706;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #FAF6F1;
+    color: #2D3819;
+    overflow-x: hidden;
+  }
+
+  h1, h2, .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+    text-wrap: balance;
+  }
+
+  .font-mono-tabular {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
